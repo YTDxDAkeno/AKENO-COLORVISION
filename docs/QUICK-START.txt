@@ -43,4 +43,4 @@ PRIVACY
    (%LOCALAPPDATA%\AkenoColorVision).
 
 More help: USER-GUIDE.md and the other guides at
-https://github.com/ytdxdakeno/akeno-colorvision
+https://github.com/YTDxDAkeno/AKENO-COLORVISION

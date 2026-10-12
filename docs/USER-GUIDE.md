@@ -179,6 +179,6 @@ Restarting your computer also always returns the screen to normal.
 ## 11. Good to know
 
 * **One filter for all monitors.** If you have two screens, both get the same correction.
-* **Screenshots** usually show the original colors, not the filtered ones.
+* **Screenshots** taken while the filter is on usually include the filtered colors.
 * **HDR:** if HDR is on, colors can look different. The app shows a note; try with HDR off if things look odd.
 * **Windows' own color filters** (Settings → Accessibility → Color filters) add on top of this app. Use one or the other.

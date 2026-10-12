@@ -54,7 +54,7 @@ public sealed class AboutViewModel : PageViewModel
         ConfirmNoCommand = new RelayCommand(() => Answer(false));
         ExportCommand = new RelayCommand(Export);
         RefreshCommand = new RelayCommand(Refresh);
-        OpenProjectCommand = new RelayCommand(() => Open("https://github.com/ytdxdakeno/akeno-colorvision"));
+        OpenProjectCommand = new RelayCommand(() => Open("https://github.com/YTDxDAkeno/AKENO-COLORVISION"));
         Refresh();
     }
 
@@ -66,7 +66,7 @@ public sealed class AboutViewModel : PageViewModel
 
     public IReadOnlyList<CompatibilityItem> Compatibility { get; } =
     [
-        new("Windows desktop, File Explorer, Settings", "Expected to work (desktop composition)", "Not yet verified"),
+        new("Windows desktop, File Explorer, Settings", "Works through desktop composition (verified on a Windows CI session)", "Not yet verified on a physical monitor"),
         new("Google Chrome, Microsoft Edge, Firefox", "Expected to work", "Not yet verified"),
         new("YouTube and other web video", "Expected to work; some protected video may behave differently", "Not yet verified"),
         new("Discord", "Expected to work", "Not yet verified"),
@@ -74,7 +74,7 @@ public sealed class AboutViewModel : PageViewModel
         new("Minecraft: Java Edition (F11 fullscreen)", "Usually composed by Windows; may not be affected on some systems", "Not yet verified in-game"),
         new("Minecraft for Windows (Bedrock)", "Expected to work in windowed / fullscreen-window mode", "Not yet verified in-game"),
         new("Games in exclusive fullscreen", "May bypass the filter — use borderless/windowed mode", "Known limitation"),
-        new("Screenshots and screen recordings", "Usually show original (unfiltered) colors", "Not yet verified"),
+        new("Screenshots and screen recordings", "Usually include the filtered colors", "Verified for GDI captures in CI"),
         new("Multiple monitors", "One filter for all monitors (no per-monitor settings)", "By design"),
         new("HDR displays", "Works, but colors may look different than in SDR", "Not yet verified"),
         new("Remote Desktop sessions", "Unknown", "Not tested"),

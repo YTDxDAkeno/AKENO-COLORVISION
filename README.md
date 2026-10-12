@@ -38,7 +38,7 @@ which normally look the same into different colors or different brightness.
 An optional per-user installer (`Akeno-ColorVision-Setup-v0.1.0.exe`, no administrator rights) is built
 too; it adds Start-menu shortcuts including *Emergency Reset* and *Safe mode*.
 
-**Requirements:** Windows 11 (Windows 10 1809 or later should also work), 64-bit.
+**Requirements:** Windows 11, 64-bit (Windows 10 1809 or later should also work but is untested).
 
 ## First launch
 
@@ -124,7 +124,7 @@ Requires the .NET 10 SDK. The Windows-only projects compile on Linux/macOS thank
 |---|---|
 | Compiles for Windows x64 | ✅ (CI on `windows-latest`, and cross-compiled on Linux) |
 | Unit tested | ✅ color math, profiles, settings, hotkeys, filter state machine, calibration, game detection, recovery |
-| Integration tested on Windows | ✅ in CI where the session allows it (Magnification API round-trip, hotkeys, message pump) — see [TESTING.md](docs/TESTING.md) |
+| Integration tested on Windows | ✅ 18 tests on GitHub's Windows runner: Magnification API round-trip, real-backend lifecycle, hotkeys, screen sampling — and proof that the filter transforms the composed desktop image pixel-exactly ([TESTING.md](docs/TESTING.md#31-composed-output-observation)) |
 | Visually verified on a Windows 11 monitor | ❌ not yet — please run the manual checklist |
 | Tested inside Minecraft | ❌ not yet — please run the Minecraft checklist |
 | Code-signed | ❌ no certificate (SmartScreen warning expected) |

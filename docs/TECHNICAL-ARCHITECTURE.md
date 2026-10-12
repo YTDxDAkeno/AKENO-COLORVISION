@@ -62,7 +62,8 @@ Implementation details (`MagnificationColorFilterBackend`):
   confirmed against Microsoft's documented grayscale and inversion examples. Internally the app uses a
   column-vector 3×4 affine `ColorMatrix`; `ToMagColorEffect()` is the single conversion point.
 * **Read-back verification.** After every set, the backend reads the active matrix back and logs a
-  warning if Windows reports something different. On the CI runner, set → get round-trips exactly.
+  warning if Windows reports something different. On the CI runner, set → get round-trips exactly, and a
+  test window's pixels change exactly as the matrix predicts.
 * **Threading.** All Magnification calls run on one dedicated background STA thread with its own Win32
   message loop (`MessagePumpThread`). The UI thread never calls the API directly.
 * **Smooth switching.** Profile changes cross-fade in 6 steps over ~120 ms (smoothstep), optional.
@@ -181,8 +182,10 @@ average. Whether those pixels are pre- or post-filter is not documented, so the 
 small window with a known color is shown and sampled while the filter is on, and the result
 (original/filtered) is stored. Filtered samples are converted back with the inverse matrix and labelled
 as estimates. The identifier's own popups use `WDA_EXCLUDEFROMCAPTURE` so they are never sampled.
-The CI integration test `ObserveWhetherScreenReadsSeeTheColorEffect` records the behaviour on a real
-Windows session (see TESTING.md).
+On the CI Windows session the integration test `ObserveWhetherScreenReadsSeeTheColorEffect` found that
+`BitBlt` returns the **filtered** pixels (exact match to the transformed color), which also confirms that
+Windows applies the matrix to the composed desktop image. The runtime check is kept because GPU drivers
+and Windows versions may differ.
 
 ## 9. Persistence
 
