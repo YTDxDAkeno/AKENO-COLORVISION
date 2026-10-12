@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Tiny stand-alone emergency reset utility and crash watchdog.
+       Deliberately has NO dependency on the UI or on the other projects so it keeps working
+       even if the main application is broken, hung, or its settings are corrupt. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>Akeno.ColorVision.Recovery</RootNamespace>
+    <AssemblyName>AkenoColorVision-EmergencyReset</AssemblyName>
+    <AssemblyTitle>Akeno ColorVision Emergency Reset</AssemblyTitle>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\assets\akeno-reset.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <!-- Small, fast-starting self-contained executable. -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>full</TrimMode>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\RecoveryProtocol.cs" Link="Shared\RecoveryProtocol.cs" />
+  </ItemGroup>
+</Project>

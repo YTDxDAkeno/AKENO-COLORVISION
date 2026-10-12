@@ -1,0 +1,145 @@
+<UserControl x:Class="Akeno.ColorVision.App.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel>
+    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+      <Image Source="pack://application:,,,/Assets/akeno-256.png" Width="64" Height="64" RenderOptions.BitmapScalingMode="HighQuality"
+             AutomationProperties.Name="Akeno ColorVision logo" />
+      <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+        <TextBlock Text="Akeno ColorVision" Style="{StaticResource Text.PageTitle}" AutomationProperties.HeadingLevel="Level1" />
+        <TextBlock Text="{Binding Version}" Style="{StaticResource Text.Secondary}" />
+      </StackPanel>
+    </StackPanel>
+
+    <Border Style="{StaticResource Notice}" Visibility="{Binding Message, Converter={StaticResource NullToVisibility}}">
+      <TextBlock Text="{Binding Message}" Style="{StaticResource Text.Body}" />
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="What this app does — and doesn't" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Body}" Margin="0,2"
+                   Text="• It applies a color transform to your whole screen that turns hard-to-tell-apart colors (especially reds, greens, browns and grays) into colors and brightness differences that are easier to tell apart." />
+        <TextBlock Style="{StaticResource Text.Body}" Margin="0,2"
+                   Text="• It cannot cure color blindness or restore missing color perception. Corrected colors can look unnatural — that is expected; the goal is telling things apart." />
+        <TextBlock Style="{StaticResource Text.Body}" Margin="0,2"
+                   Text="• Calibration is not a medical test, and the app never tells you which type of color vision deficiency you have." />
+        <TextBlock Style="{StaticResource Text.Body}" Margin="0,2"
+                   Text="• The filter uses the Windows Magnification API: one color matrix for all monitors. Some exclusive-fullscreen games may bypass it." />
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Check that the filter works on this PC" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Text="{Binding VerifyText}" Style="{StaticResource Text.Body}" Margin="0,0,0,12" AutomationProperties.LiveSetting="Polite" />
+        <WrapPanel>
+          <Button Content="Run the 5-second test" Command="{Binding StartTestCommand}" Style="{StaticResource AccentButton}" Margin="0,0,8,8" />
+          <Button Content="Yes, the colors changed" Command="{Binding ConfirmYesCommand}" Margin="0,0,8,8"
+                  Visibility="{Binding IsAsking, Converter={StaticResource BoolToVisibility}}" />
+          <Button Content="No, nothing changed" Command="{Binding ConfirmNoCommand}" Margin="0,0,8,8"
+                  Visibility="{Binding IsAsking, Converter={StaticResource BoolToVisibility}}" />
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Rendering backends" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" AutomationProperties.HeadingLevel="Level2" />
+        <ItemsControl ItemsSource="{Binding Backends}" Focusable="False">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,0,0,1" Padding="0,8">
+                <StackPanel>
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" TextWrapping="Wrap" />
+                  <TextBlock Foreground="{DynamicResource Brush.Text}" Margin="0,2,0,0">
+                    <Run Text="Status: " /><Run Text="{Binding Level, Mode=OneWay}" FontWeight="SemiBold" />
+                  </TextBlock>
+                  <TextBlock Text="{Binding Summary}" Style="{StaticResource Text.Secondary}" />
+                  <ItemsControl ItemsSource="{Binding Details}" Focusable="False" Margin="0,4,0,0">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat='• {0}'}" Style="{StaticResource Text.Caption}" />
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <Grid Margin="0,0,0,8">
+          <TextBlock Text="Diagnostics" Style="{StaticResource Text.CardTitle}" AutomationProperties.HeadingLevel="Level2" />
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Refresh" Command="{Binding RefreshCommand}" Margin="0,0,8,0" />
+            <Button Content="Export diagnostics…" Command="{Binding ExportCommand}" />
+          </StackPanel>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding Sections}" Focusable="False">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Margin="0,0,0,12">
+                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Accent}" Margin="0,0,0,4" />
+                <ItemsControl ItemsSource="{Binding Items}" Focusable="False">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="260" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Key}" Style="{StaticResource Text.Secondary}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Value}" Style="{StaticResource Text.Body}" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Compatibility" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,4" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,0,0,10"
+                   Text="&quot;Not yet verified&quot; means it is expected to work from how Windows applies the filter, but it has not been tested on real hardware for this version." />
+        <ItemsControl ItemsSource="{Binding Compatibility}" Focusable="False">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="2*" />
+                  <ColumnDefinition Width="3*" />
+                  <ColumnDefinition Width="1.3*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Target}" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" TextWrapping="Wrap" Margin="0,0,12,0" />
+                <TextBlock Grid.Column="1" Text="{Binding Expectation}" Style="{StaticResource Text.Secondary}" Margin="0,0,12,0" />
+                <TextBlock Grid.Column="2" Text="{Binding Status}" Style="{StaticResource Text.Body}" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Science and credits" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,2" Text="Color vision simulation: G. M. Machado, M. M. Oliveira, L. A. F. Fernandes, “A Physiologically-based Model for Simulation of Color Vision Deficiency”, IEEE TVCG 15(6), 2009." />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,2" Text="Daltonization: O. Fidaner, P. Lin, N. Ozguven, “Analysis of Color Blindness”, Stanford University, 2005." />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,2" Text="Color difference: G. Sharma, W. Wu, E. N. Dalal, “The CIEDE2000 color-difference formula”, Color Research &amp; Application 30(1), 2005." />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,2" Text="Color naming uses the OKLab color space by Björn Ottosson (2020)." />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,8,0,0" Text="Open source under the MIT License. Not affiliated with Microsoft or Mojang. Minecraft is a trademark of Mojang Synergies AB." />
+        <Button Content="Open the project page" Command="{Binding OpenProjectCommand}" Style="{StaticResource LinkButton}" HorizontalAlignment="Left" Margin="0,8,0,0" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

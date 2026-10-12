@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Tests that exercise real Windows APIs. They report as skipped on non-Windows machines. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageReference Include="Xunit.SkippableFact" Version="1.5.23" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Akeno.ColorVision.Core\Akeno.ColorVision.Core.csproj" />
+    <ProjectReference Include="..\..\src\Akeno.ColorVision.Windows\Akeno.ColorVision.Windows.csproj" />
+    <ProjectReference Include="..\..\src\Akeno.ColorVision.Rendering\Akeno.ColorVision.Rendering.csproj" />
+  </ItemGroup>
+</Project>
