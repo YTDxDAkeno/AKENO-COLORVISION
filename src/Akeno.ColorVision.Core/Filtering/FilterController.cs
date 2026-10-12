@@ -115,46 +115,11 @@ public sealed class FilterController : IDisposable
 
     public BackendResult Enable()
     {
-        FilterStateChangedEventArgs? change = null;
+        FilterStateChangedEventArgs? change;
         BackendResult result;
         lock (_gate)
         {
-            if (_state == FilterState.ShutDown)
-            {
-                return BackendResult.Fail("The filter has been shut down.");
-            }
-
-            if (_state == FilterState.On)
-            {
-                return BackendResult.Ok("Already on.");
-            }
-
-            result = _state is FilterState.NotInitialized or FilterState.Failed
-                ? InitializeCore(out change)
-                : BackendResult.Ok();
-
-            if (result.Success)
-            {
-                var validation = TransformValidator.Validate(_target);
-                if (!validation.IsSafe)
-                {
-                    result = BackendResult.Fail("Rejected an unsafe color transform: " + string.Join(" ", validation.Errors));
-                }
-                else
-                {
-                    result = _backend.ApplyTransformation(_target);
-                    if (result.Success)
-                    {
-                        LastError = null;
-                        change = Transition(FilterState.On, "Filter turned on.") ?? change;
-                    }
-                    else
-                    {
-                        _log.Error($"Turning the filter on failed: {result}");
-                        change = FailSafe(result.Message);
-                    }
-                }
-            }
+            result = EnableCore(out change);
         }
 
         Raise(change);
@@ -163,32 +128,30 @@ public sealed class FilterController : IDisposable
 
     public BackendResult Disable()
     {
-        FilterStateChangedEventArgs? change = null;
+        FilterStateChangedEventArgs? change;
         BackendResult result;
         lock (_gate)
         {
-            if (_state != FilterState.On)
-            {
-                return BackendResult.Ok("Already off.");
-            }
-
-            result = _backend.Disable();
-            if (result.Success)
-            {
-                change = Transition(FilterState.Off, "Filter turned off.");
-            }
-            else
-            {
-                _log.Error($"Turning the filter off failed: {result}");
-                change = FailSafe(result.Message);
-            }
+            result = DisableCore(out change);
         }
 
         Raise(change);
         return result;
     }
 
-    public BackendResult Toggle() => IsOn ? Disable() : Enable();
+    /// <summary>Atomically switches between on and off (safe when several sources toggle at once).</summary>
+    public BackendResult Toggle()
+    {
+        FilterStateChangedEventArgs? change;
+        BackendResult result;
+        lock (_gate)
+        {
+            result = _state == FilterState.On ? DisableCore(out change) : EnableCore(out change);
+        }
+
+        Raise(change);
+        return result;
+    }
 
     /// <summary>Re-applies the current matrix (after sleep/resume, unlock or display changes).</summary>
     public BackendResult Reapply()
@@ -320,6 +283,70 @@ public sealed class FilterController : IDisposable
     {
         Shutdown();
         _backend.Dispose();
+    }
+
+    private BackendResult EnableCore(out FilterStateChangedEventArgs? change)
+    {
+        change = null;
+        if (_state == FilterState.ShutDown)
+        {
+            return BackendResult.Fail("The filter has been shut down.");
+        }
+
+        if (_state == FilterState.On)
+        {
+            return BackendResult.Ok("Already on.");
+        }
+
+        var result = _state is FilterState.NotInitialized or FilterState.Failed
+            ? InitializeCore(out change)
+            : BackendResult.Ok();
+        if (!result.Success)
+        {
+            return result;
+        }
+
+        var validation = TransformValidator.Validate(_target);
+        if (!validation.IsSafe)
+        {
+            return BackendResult.Fail("Rejected an unsafe color transform: " + string.Join(" ", validation.Errors));
+        }
+
+        result = _backend.ApplyTransformation(_target);
+        if (result.Success)
+        {
+            LastError = null;
+            change = Transition(FilterState.On, "Filter turned on.") ?? change;
+        }
+        else
+        {
+            _log.Error($"Turning the filter on failed: {result}");
+            change = FailSafe(result.Message);
+        }
+
+        return result;
+    }
+
+    private BackendResult DisableCore(out FilterStateChangedEventArgs? change)
+    {
+        change = null;
+        if (_state != FilterState.On)
+        {
+            return BackendResult.Ok("Already off.");
+        }
+
+        var result = _backend.Disable();
+        if (result.Success)
+        {
+            change = Transition(FilterState.Off, "Filter turned off.");
+        }
+        else
+        {
+            _log.Error($"Turning the filter off failed: {result}");
+            change = FailSafe(result.Message);
+        }
+
+        return result;
     }
 
     private BackendResult InitializeCore(out FilterStateChangedEventArgs? change)
