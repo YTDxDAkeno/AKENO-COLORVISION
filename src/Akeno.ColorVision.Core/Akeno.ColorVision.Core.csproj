@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Platform-independent application logic: profiles, settings, filter state machine, calibration, game rules. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Akeno.ColorVision.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Akeno.ColorVision.ColorScience\Akeno.ColorVision.ColorScience.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Akeno.ColorVision.UnitTests" />
+    <InternalsVisibleTo Include="AkenoColorVision" />
+    <InternalsVisibleTo Include="Akeno.ColorVision.IntegrationTests" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\RecoveryProtocol.cs" Link="Shared\RecoveryProtocol.cs" />
+  </ItemGroup>
+</Project>

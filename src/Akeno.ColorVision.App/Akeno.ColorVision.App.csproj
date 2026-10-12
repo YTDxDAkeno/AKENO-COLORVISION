@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>Akeno.ColorVision.App</RootNamespace>
+    <AssemblyName>AkenoColorVision</AssemblyName>
+    <AssemblyTitle>Akeno ColorVision</AssemblyTitle>
+    <UseWPF>true</UseWPF>
+    <!-- Only used for the system tray icon (NotifyIcon); ships inside the Windows Desktop runtime. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\assets\akeno.ico</ApplicationIcon>
+    <!-- Portable distribution: one self-contained executable, no .NET install required. -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+    <!-- WPF reads DPI awareness from app.manifest; the WinForms analyzer warning does not apply (WinForms is only used for the tray icon). -->
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- WPF and WinForms both define many identically named types; never import WinForms globally. -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\assets\akeno.ico" Link="Assets\akeno.ico" />
+    <Resource Include="..\..\assets\akeno-256.png" Link="Assets\akeno-256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Akeno.ColorVision.ColorScience\Akeno.ColorVision.ColorScience.csproj" />
+    <ProjectReference Include="..\Akeno.ColorVision.Core\Akeno.ColorVision.Core.csproj" />
+    <ProjectReference Include="..\Akeno.ColorVision.Windows\Akeno.ColorVision.Windows.csproj" />
+    <ProjectReference Include="..\Akeno.ColorVision.Rendering\Akeno.ColorVision.Rendering.csproj" />
+  </ItemGroup>
+</Project>

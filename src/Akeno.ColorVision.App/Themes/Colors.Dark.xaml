@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Dark theme tokens. State is never communicated by color alone: every state also has text and/or an icon. -->
+  <SolidColorBrush x:Key="Brush.Window" Color="#15161C" />
+  <SolidColorBrush x:Key="Brush.NavBackground" Color="#1A1B23" />
+  <SolidColorBrush x:Key="Brush.Surface" Color="#1F2029" />
+  <SolidColorBrush x:Key="Brush.SurfaceAlt" Color="#292B37" />
+  <SolidColorBrush x:Key="Brush.SurfaceHover" Color="#323543" />
+  <SolidColorBrush x:Key="Brush.SurfacePressed" Color="#3B3F50" />
+  <SolidColorBrush x:Key="Brush.Border" Color="#3A3D4E" />
+  <SolidColorBrush x:Key="Brush.Text" Color="#F2F2F7" />
+  <SolidColorBrush x:Key="Brush.TextSecondary" Color="#B4B7C7" />
+  <SolidColorBrush x:Key="Brush.TextDisabled" Color="#6E7182" />
+  <SolidColorBrush x:Key="Brush.Accent" Color="#7C6CFF" />
+  <SolidColorBrush x:Key="Brush.AccentHover" Color="#9184FF" />
+  <SolidColorBrush x:Key="Brush.AccentPressed" Color="#6A59F0" />
+  <SolidColorBrush x:Key="Brush.AccentSoft" Color="#2C2850" />
+  <SolidColorBrush x:Key="Brush.AccentText" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="Brush.Focus" Color="#C9C2FF" />
+  <SolidColorBrush x:Key="Brush.Info" Color="#4AA8FF" />
+  <SolidColorBrush x:Key="Brush.InfoSoft" Color="#1B2A3D" />
+  <SolidColorBrush x:Key="Brush.Warning" Color="#F5B01E" />
+  <SolidColorBrush x:Key="Brush.WarningSoft" Color="#3A3020" />
+  <SolidColorBrush x:Key="Brush.WarningText" Color="#1A1400" />
+  <!-- Neutral mid-gray surround for color comparisons (same in both themes). -->
+  <SolidColorBrush x:Key="Brush.SwatchSurround" Color="#595959" />
+</ResourceDictionary>

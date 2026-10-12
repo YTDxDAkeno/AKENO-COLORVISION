@@ -1,0 +1,46 @@
+AKENO COLORVISION — QUICK START
+===============================
+
+Akeno ColorVision changes the colors on your whole screen so that colors which
+normally look the same (many reds, greens, browns and grays) become different
+colors or different brightness. It can't cure color blindness — it helps you
+tell things apart.
+
+1. START IT
+   Double-click "AkenoColorVision.exe".
+   Nothing needs to be installed. Keep both .exe files in the same folder.
+
+   Windows may show "Windows protected your PC" (SmartScreen) because the app
+   is new and not code-signed. Click "More info" and then "Run anyway".
+
+2. TURN THE FILTER ON
+   Click the big "Turn filter on" button.
+   Shortcut anywhere (even in games):  Ctrl + Alt + Shift + F
+
+3. MAKE IT YOURS (recommended, about 5 minutes)
+   Click "Calibration" on the left and follow the steps. There are no wrong
+   answers and it is not a medical test.
+
+4. MINECRAFT
+   Open "Gaming". The "Minecraft — Nether Visibility" profile is used
+   automatically while Minecraft is in front. If the colors don't change in
+   the game, play in windowed / maximized mode instead of F11 fullscreen.
+
+5. WHAT IS THAT COLOR?
+   Point the mouse at something and press  Ctrl + Alt + Shift + C
+   The color name appears next to the mouse pointer.
+
+IF THE SCREEN EVER LOOKS WRONG
+   * Press  Ctrl + Alt + Shift + Backspace   (emergency reset), or
+   * click "Reset colors" in the app, or
+   * double-click "AkenoColorVision-EmergencyReset.exe" in this folder.
+   The app then starts in safe mode next time (filter off until you turn it on).
+   Hold Shift while starting the app to force safe mode.
+
+PRIVACY
+   Works completely offline. No account, no telemetry. Your screen is never
+   recorded or uploaded. Profiles stay on this PC
+   (%LOCALAPPDATA%\AkenoColorVision).
+
+More help: USER-GUIDE.md and the other guides at
+https://github.com/ytdxdakeno/akeno-colorvision

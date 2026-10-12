@@ -1,0 +1,19 @@
+<Project>
+  <!-- Shared build settings for every project in the repository. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Lets the Windows-only projects compile on Linux/macOS build agents as well. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Deterministic>true</Deterministic>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <Product>Akeno ColorVision</Product>
+    <Company>Akeno ColorVision contributors</Company>
+    <Copyright>Copyright (c) 2026 Akeno ColorVision contributors</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+</Project>

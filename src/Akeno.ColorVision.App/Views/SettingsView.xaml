@@ -1,0 +1,104 @@
+<UserControl x:Class="Akeno.ColorVision.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Akeno.ColorVision.App.Controls">
+  <StackPanel>
+    <TextBlock Text="Settings" Style="{StaticResource Text.PageTitle}" AutomationProperties.HeadingLevel="Level1" />
+    <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,6,0,22" Text="Changes are saved immediately." />
+
+    <Border Style="{StaticResource Notice}" Visibility="{Binding Message, Converter={StaticResource NullToVisibility}}">
+      <TextBlock Text="{Binding Message}" Style="{StaticResource Text.Body}" AutomationProperties.LiveSetting="Polite" />
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="General" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,6" AutomationProperties.HeadingLevel="Level2" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding StartWithWindows}" Content="Start Akeno ColorVision when I sign in to Windows" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding StartMinimizedToTray}" Content="Start hidden in the system tray" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding CloseToTray}" Content="Keep running in the tray when the window is closed" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding EnableFilterOnStartup}" Content="Turn the filter on when the app starts" />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,0,0,8"
+                   Text="Safety: after a crash or an emergency reset, the app starts in safe mode and does not turn the filter on by itself. Hold Shift while starting the app to force safe mode." />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding RememberLastProfile}" Content="Remember the last profile I used" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding SmoothTransitions}" Content="Fade smoothly when switching profiles" />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ShowShortcutConfirmations}" Content="Show a short on-screen message when I use a shortcut" />
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Keyboard shortcuts" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,4" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,0,0,12"
+                   Text="Click a box and press the new key combination. Shortcuts work everywhere, even in games. Use Ctrl, Alt or Win together with a key." />
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Text="Turn filter on / off" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Text}" FontWeight="SemiBold" />
+          <controls:HotkeyBox Grid.Column="1" Margin="0,4,12,4" AutomationProperties.Name="Shortcut to turn the filter on or off"
+                              Text="{Binding ToggleShortcut, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
+          <TextBlock Grid.Column="2" Text="{Binding ToggleStatus}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+
+          <TextBlock Grid.Row="1" Text="Emergency reset" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Text}" FontWeight="SemiBold" />
+          <controls:HotkeyBox Grid.Row="1" Grid.Column="1" Margin="0,4,12,4" AutomationProperties.Name="Emergency reset shortcut"
+                              Text="{Binding EmergencyShortcut, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
+          <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding EmergencyStatus}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+
+          <TextBlock Grid.Row="2" Text="Identify color" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Text}" FontWeight="SemiBold" />
+          <controls:HotkeyBox Grid.Row="2" Grid.Column="1" Margin="0,4,12,4" AutomationProperties.Name="Identify color shortcut"
+                              Text="{Binding IdentifyShortcut, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
+          <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding IdentifyStatus}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+        </Grid>
+        <Button Content="Restore default shortcuts" Command="{Binding ResetShortcutsCommand}" HorizontalAlignment="Left" Margin="0,12,0,0" />
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Appearance" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,6" AutomationProperties.HeadingLevel="Level2" />
+        <RadioButton Content="Dark theme" GroupName="Theme" IsChecked="{Binding DarkTheme}" />
+        <RadioButton Content="Light theme" GroupName="Theme" IsChecked="{Binding LightTheme}" />
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Privacy and diagnostics" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,6" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,0,0,8"
+                   Text="Akeno ColorVision works fully offline. It has no account, no telemetry, and never records or uploads your screen. Calibration answers and profiles stay on this PC." />
+        <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ErrorLoggingEnabled}" Content="Keep a local log file to help troubleshoot problems" />
+        <WrapPanel Margin="0,10,0,0">
+          <Button Content="Open log folder" Command="{Binding OpenLogsCommand}" Margin="0,0,8,8" />
+          <Button Content="Export diagnostics…" Command="{Binding ExportDiagnosticsCommand}" Margin="0,0,8,8" />
+          <Button Content="Open data folder" Command="{Binding OpenDataCommand}" Margin="0,0,8,8" />
+        </WrapPanel>
+        <TextBlock Style="{StaticResource Text.Caption}">
+          <Run Text="Data folder: " /><Run Text="{Binding DataDirectory, Mode=OneWay}" />
+        </TextBlock>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="Safety and recovery" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,6" AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Style="{StaticResource Text.Body}" Margin="0,0,0,6"
+                   Text="If the screen ever looks wrong and the app does not respond, run the emergency reset tool. It turns the filter off, closes a frozen app if needed, and makes the next start use safe mode." />
+        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,0,0,10">
+          <Run Text="Emergency reset tool: " /><Run Text="{Binding ResetToolPath, Mode=OneWay}" />
+        </TextBlock>
+        <WrapPanel>
+          <Button Content="Run emergency reset tool" Command="{Binding RunResetToolCommand}" Style="{StaticResource WarningButton}" Margin="0,0,8,8" />
+          <Button Content="Restore default settings…" Command="{Binding RestoreDefaultsCommand}" Margin="0,0,8,8" />
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

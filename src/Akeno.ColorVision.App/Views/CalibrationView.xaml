@@ -1,0 +1,263 @@
+<UserControl x:Class="Akeno.ColorVision.App.Views.CalibrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel>
+    <TextBlock Text="Calibration" Style="{StaticResource Text.PageTitle}" AutomationProperties.HeadingLevel="Level1" />
+    <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,6,0,8" MaxWidth="820" HorizontalAlignment="Left"
+               Text="Find the correction that works best for your eyes on this screen. It takes about 5 minutes. There are no right or wrong answers, and this is not a medical test." />
+    <TextBlock Text="{Binding StepText}" FontWeight="SemiBold" FontSize="15" Foreground="{DynamicResource Brush.Accent}" Margin="0,8,0,14"
+               Visibility="{Binding InProgress, Converter={StaticResource BoolToVisibility}}" AutomationProperties.LiveSetting="Polite" />
+
+    <!-- ========================= Intro ========================= -->
+    <StackPanel Visibility="{Binding IsIntro, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="Before you start" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" />
+          <ItemsControl ItemsSource="{Binding ConditionNotes}" Focusable="False">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <DockPanel Margin="0,4">
+                  <TextBlock DockPanel.Dock="Left" Text="&#xE73E;" Style="{StaticResource Text.Icon}" FontSize="14" Margin="0,3,10,0" VerticalAlignment="Top" />
+                  <TextBlock Text="{Binding}" Style="{StaticResource Text.Body}" />
+                </DockPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Button Content="Start calibration" Command="{Binding StartCommand}" Style="{StaticResource AccentButton}"
+                  MinHeight="52" FontSize="17" MinWidth="240" HorizontalAlignment="Left" Margin="0,18,0,0" />
+        </StackPanel>
+      </Border>
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="What happens" Style="{StaticResource Text.CardTitle}" Margin="0,0,0,8" />
+          <TextBlock Style="{StaticResource Text.Body}" Text="1. You tell us in your own words how colors look to you." />
+          <TextBlock Style="{StaticResource Text.Body}" Text="2. You compare pairs of colors and say how different they look." />
+          <TextBlock Style="{StaticResource Text.Body}" Text="3. You pick which corrected version is easiest to tell apart." />
+          <TextBlock Style="{StaticResource Text.Body}" Text="4. You check a game-style scene (and optionally your own Minecraft screenshot)." />
+          <TextBlock Style="{StaticResource Text.Body}" Text="5. Your personal profile is saved on this PC. Nothing is uploaded." />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- ========================= Step 1 ========================= -->
+    <StackPanel Visibility="{Binding IsDescribe, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="Which description fits you best?" Style="{StaticResource Text.Section}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,0,0,14" Text="This only chooses a starting point. It is not a diagnosis." />
+          <ItemsControl ItemsSource="{Binding DescriptionOptions}" Focusable="False">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <RadioButton Style="{StaticResource CardRadio}" GroupName="SelfDescription" IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                             AutomationProperties.Name="{Binding Text}">
+                  <StackPanel>
+                    <TextBlock Text="{Binding Text}" Style="{StaticResource Text.CardTitle}" />
+                    <TextBlock Text="{Binding Detail}" Style="{StaticResource Text.Secondary}" />
+                  </StackPanel>
+                </RadioButton>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+            <Button Content="Next" Command="{Binding NextFromDescribeCommand}" Style="{StaticResource AccentButton}" MinWidth="140" Margin="0,0,8,0" />
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- ========================= Step 2 ========================= -->
+    <StackPanel Visibility="{Binding IsPairs, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <Grid Margin="0,0,0,6">
+            <TextBlock Text="How different do these two colors look to you?" Style="{StaticResource Text.Section}" AutomationProperties.HeadingLevel="Level2" />
+            <TextBlock Text="{Binding PairProgressText}" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Brush.TextSecondary}" AutomationProperties.LiveSetting="Polite" />
+          </Grid>
+          <ProgressBar Value="{Binding PairProgress, Mode=OneWay}" Minimum="0" Maximum="1" Margin="0,0,0,16" AutomationProperties.Name="Calibration progress" />
+
+          <Border Style="{StaticResource SwatchFrame}" Padding="28" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+              <StackPanel>
+                <Border Width="230" Height="230" CornerRadius="10" Background="{Binding FirstBrush}" AutomationProperties.Name="Color 1" />
+                <TextBlock Text="Color 1" Foreground="White" FontSize="15" HorizontalAlignment="Center" Margin="0,8,0,0" />
+              </StackPanel>
+              <Border Width="44" />
+              <StackPanel>
+                <Border Width="230" Height="230" CornerRadius="10" Background="{Binding SecondBrush}" AutomationProperties.Name="Color 2" />
+                <TextBlock Text="Color 2" Foreground="White" FontSize="15" HorizontalAlignment="Center" Margin="0,8,0,0" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <UniformGrid Columns="4" Margin="0,20,0,0">
+            <Button Style="{StaticResource ChoiceButton}" Command="{Binding RateCommand}" CommandParameter="0" Margin="0,0,8,0">
+              <TextBlock Text="Clearly different" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Style="{StaticResource ChoiceButton}" Command="{Binding RateCommand}" CommandParameter="1" Margin="0,0,8,0">
+              <TextBlock Text="Slightly different" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Style="{StaticResource ChoiceButton}" Command="{Binding RateCommand}" CommandParameter="2" Margin="0,0,8,0">
+              <TextBlock Text="Almost the same" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+            <Button Style="{StaticResource ChoiceButton}" Command="{Binding RateCommand}" CommandParameter="3">
+              <TextBlock Text="Exactly the same" TextWrapping="Wrap" TextAlignment="Center" />
+            </Button>
+          </UniformGrid>
+          <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+            <Button Content="Back" Command="{Binding PairBackCommand}" Margin="0,0,8,0" />
+            <Button Content="Cancel calibration" Command="{Binding CancelCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- ========================= Step 3 ========================= -->
+    <StackPanel Visibility="{Binding IsCompare, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Notice}">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Left" Text="&#xE946;" Style="{StaticResource Text.Icon}" Margin="0,2,12,0" VerticalAlignment="Top" />
+          <TextBlock Text="{Binding InsightSummary}" Style="{StaticResource Text.Body}" />
+        </DockPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="{Binding RoundProgress}" Style="{StaticResource Text.Caption}" />
+          <TextBlock Text="{Binding RoundTitle}" Style="{StaticResource Text.Section}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock Text="{Binding RoundHint}" Style="{StaticResource Text.Secondary}" Margin="0,0,0,12" />
+          <TextBlock Text="Original colors (for reference):" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <Image Source="{Binding OriginalPattern}" Stretch="Uniform" MaxWidth="380" HorizontalAlignment="Left" Margin="0,6,0,0"
+                 RenderOptions.BitmapScalingMode="NearestNeighbor" AutomationProperties.Name="Original test colors" />
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource WarningNotice}" Visibility="{Binding PreviewCountdownText, Converter={StaticResource NullToVisibility}}">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Content="Stop now" Command="{Binding StopPreviewCommand}" Margin="12,0,0,0" />
+          <TextBlock Text="{Binding PreviewCountdownText}" Style="{StaticResource Text.Body}" FontWeight="SemiBold" VerticalAlignment="Center"
+                     AutomationProperties.LiveSetting="Polite" />
+        </DockPanel>
+      </Border>
+
+      <ItemsControl ItemsSource="{Binding Candidates}" Focusable="False">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <UniformGrid Columns="2" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Style="{StaticResource Card}" Margin="0,0,16,16">
+              <StackPanel>
+                <TextBlock Text="{Binding Title}" Style="{StaticResource Text.CardTitle}" />
+                <TextBlock Text="{Binding StrengthText}" Style="{StaticResource Text.Caption}" Margin="0,2,0,8" />
+                <Image Source="{Binding Preview}" Stretch="Uniform" MaxWidth="420" HorizontalAlignment="Left"
+                       RenderOptions.BitmapScalingMode="NearestNeighbor" AutomationProperties.Name="{Binding Title}" />
+                <TextBlock Text="{Binding Description}" Style="{StaticResource Text.Secondary}" Margin="0,8,0,12" />
+                <WrapPanel>
+                  <Button Command="{Binding DataContext.ChooseCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"
+                          Style="{StaticResource AccentButton}" Margin="0,0,8,8">
+                    <TextBlock><Run Text="Choose option " /><Run Text="{Binding Letter, Mode=OneWay}" /></TextBlock>
+                  </Button>
+                  <Button Content="Try on whole screen (10 s)" Margin="0,0,8,8"
+                          Command="{Binding DataContext.TryOnScreenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <Button Content="Cancel calibration" Command="{Binding CancelCommand}" HorizontalAlignment="Left" />
+    </StackPanel>
+
+    <!-- ========================= Step 4 ========================= -->
+    <StackPanel Visibility="{Binding IsGaming, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="How does it look in a game-style scene?" Style="{StaticResource Text.Section}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock Style="{StaticResource Text.Secondary}" Margin="0,0,0,14"
+                     Text="This original test scene uses colors similar to Minecraft's Nether: dark reds, browns and grays. You can also load your own screenshot — it stays on this PC." />
+          <WrapPanel Margin="0,0,0,12">
+            <Button Content="Load my own screenshot…" Command="{Binding ImportScreenshotCommand}" Margin="0,0,8,8" />
+            <Button Content="Use the test scene" Command="{Binding UseDefaultSceneCommand}" Margin="0,0,8,8" />
+          </WrapPanel>
+
+          <TextBlock Text="Original colors" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <Image Source="{Binding SceneOriginal}" Stretch="Uniform" MaxWidth="640" HorizontalAlignment="Left" Margin="0,6,0,16"
+                 RenderOptions.BitmapScalingMode="NearestNeighbor" AutomationProperties.Name="Scene with original colors" />
+          <TextBlock Text="With your new profile" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <Image Source="{Binding SceneProfile}" Stretch="Uniform" MaxWidth="640" HorizontalAlignment="Left" Margin="0,6,0,16"
+                 RenderOptions.BitmapScalingMode="NearestNeighbor" AutomationProperties.Name="Scene with your new profile" />
+          <TextBlock Text="With the Minecraft — Nether Visibility preset" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <Image Source="{Binding ScenePreset}" Stretch="Uniform" MaxWidth="640" HorizontalAlignment="Left" Margin="0,6,0,16"
+                 RenderOptions.BitmapScalingMode="NearestNeighbor" AutomationProperties.Name="Scene with the Minecraft preset" />
+
+          <TextBlock Text="Blocks in the test scene" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" Margin="0,0,0,6" />
+          <ItemsControl ItemsSource="{Binding SceneLegend}" Focusable="False" Margin="0,0,0,16">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal" Width="220" Margin="0,0,8,6">
+                  <Border Width="22" Height="22" CornerRadius="4" Background="{Binding Swatch}" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1" />
+                  <TextBlock Text="{Binding Name}" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.Text}" />
+                </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <TextBlock Text="When Minecraft is in front, use:" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <RadioButton Content="My new profile" GroupName="MinecraftChoice" IsChecked="{Binding UseProfileForMinecraft, Mode=TwoWay}" />
+          <RadioButton Content="The Minecraft — Nether Visibility preset" GroupName="MinecraftChoice" IsChecked="{Binding UsePresetForMinecraft, Mode=TwoWay}" />
+          <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+            <Button Content="Next" Command="{Binding ToSaveCommand}" Style="{StaticResource AccentButton}" MinWidth="140" Margin="0,0,8,0" />
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- ========================= Step 5 ========================= -->
+    <StackPanel Visibility="{Binding IsSave, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="Save your profile" Style="{StaticResource Text.Section}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock Text="{Binding ChoiceSummary}" Style="{StaticResource Text.Body}" Margin="0,0,0,14" />
+          <TextBlock Text="Profile name" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text}" />
+          <TextBox Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}" Margin="0,6,0,14" MaxLength="60" AutomationProperties.Name="Profile name" />
+          <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding TurnOnNow}" Content="Turn the filter on now" />
+          <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding EnableOnStartup}" Content="Turn the filter on automatically when the app starts" />
+          <TextBlock Style="{StaticResource Text.Caption}" Margin="0,2,0,16"
+                     Text="If anything ever looks wrong, the emergency shortcut or the Reset colors button restores normal colors instantly, and the app starts in safe mode after a problem." />
+          <StackPanel Orientation="Horizontal">
+            <Button Content="Save profile" Command="{Binding SaveCommand}" Style="{StaticResource AccentButton}" MinWidth="160" Margin="0,0,8,0" />
+            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- ========================= Done ========================= -->
+    <StackPanel Visibility="{Binding IsDone, Converter={StaticResource BoolToVisibility}}">
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="&#xE73E;" Style="{StaticResource Text.Icon}" FontSize="24" Margin="0,0,12,0" />
+            <TextBlock Text="All done!" Style="{StaticResource Text.Big}" />
+          </StackPanel>
+          <TextBlock Text="{Binding SavedMessage}" Style="{StaticResource Text.Body}" Margin="0,10,0,10" />
+          <TextBlock Style="{StaticResource Text.Secondary}" Text="Tip: use the strength slider on Home to fine-tune at any time, and run calibration again whenever you like (for example on a different monitor)." />
+          <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+            <Button Content="Go to Home" Command="{Binding GoHomeCommand}" Style="{StaticResource AccentButton}" Margin="0,0,8,0" />
+            <Button Content="Calibrate again" Command="{Binding RestartCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

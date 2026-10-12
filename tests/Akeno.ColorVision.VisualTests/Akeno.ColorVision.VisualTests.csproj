@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Manual visual test board: swatches, gradients and confusion pairs used to verify the
+       system-wide filter by eye on a real Windows 11 desktop. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>AkenoColorVision-VisualTests</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Akeno.ColorVision.ColorScience\Akeno.ColorVision.ColorScience.csproj" />
+  </ItemGroup>
+</Project>
