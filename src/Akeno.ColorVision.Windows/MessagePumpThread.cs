@@ -76,7 +76,18 @@ public sealed class MessagePumpThread : IDisposable
             }
         });
 
-        if (!tcs.Task.Wait(timeout))
+        bool completed;
+        try
+        {
+            completed = tcs.Task.Wait(timeout);
+        }
+        catch (AggregateException)
+        {
+            // Faulted: rethrown below with its original type (not wrapped in AggregateException).
+            completed = true;
+        }
+
+        if (!completed)
         {
             throw new TimeoutException($"Thread '{_thread.Name}' did not respond within {timeout.TotalMilliseconds:0} ms.");
         }

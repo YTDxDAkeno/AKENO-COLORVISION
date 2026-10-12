@@ -30,10 +30,10 @@ jobs:
     timeout-minutes: 40
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up .NET 10
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
@@ -92,7 +92,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "ISCC failed." }
 
       - name: Upload portable ZIP
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Akeno-ColorVision-v${{ steps.version.outputs.version }}-win-x64
           path: |
@@ -102,14 +102,14 @@ jobs:
 
       - name: Upload installer
         if: steps.installer.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Akeno-ColorVision-Setup-v${{ steps.version.outputs.version }}
           path: dist/*Setup*.exe
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results
           path: TestResults
